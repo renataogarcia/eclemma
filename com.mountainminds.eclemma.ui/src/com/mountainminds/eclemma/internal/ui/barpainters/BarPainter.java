@@ -23,11 +23,14 @@ public abstract class BarPainter {
   private static final int DEFAULT_BORDER_LEFT = 2;
   private static final int DEFAULT_BORDER_RIGHT = 10;
 
+  private static final int LEVEL_PADDING = 7;
+
   protected static enum Paint {
     COVERED, MISSED
   }
 
-  public void paint(Event event, int columnWith, ICounter counter, int maxTotal) {
+  public void paint(Event event, int columnWith, ICounter counter,
+      int maxTotal, int level) {
     if (maxTotal == 0) {
       return;
     }
@@ -38,11 +41,13 @@ public abstract class BarPainter {
     Rectangle clipping = event.gc.getClipping();
     event.gc.setClipping(clipping);
 
-    final int maxWidth = getMaxWidth(event, columnWith);
+    int padding = level * LEVEL_PADDING;
+
+    final int maxWidth = getMaxWidth(event, columnWith) - padding;
     final int missedLength = maxWidth * counter.getMissedCount() / maxTotal;
-    paintBar(event, MISSED, 0, missedLength);
+    paintBar(event, MISSED, 0, missedLength, padding);
     final int coveredLength = maxWidth * counter.getCoveredCount() / maxTotal;
-    paintBar(event, COVERED, missedLength, coveredLength);
+    paintBar(event, COVERED, missedLength, coveredLength, padding);
   }
 
   public void dispose() {
@@ -50,11 +55,11 @@ public abstract class BarPainter {
   }
 
   public void paint(Event event, int columnWith, ICounter counter) {
-    paint(event, columnWith, counter, counter.getTotalCount());
+    paint(event, columnWith, counter, counter.getTotalCount(), 0);
   }
 
   protected abstract void paintBar(Event event, Paint type, int xOffset,
-      int width);
+      int width, int padding);
 
   protected int getBorderLeft() {
     return DEFAULT_BORDER_LEFT;

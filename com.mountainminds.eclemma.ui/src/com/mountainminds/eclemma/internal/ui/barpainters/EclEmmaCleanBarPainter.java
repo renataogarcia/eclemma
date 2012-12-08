@@ -21,7 +21,8 @@ public class EclEmmaCleanBarPainter extends BarPainter {
   }
 
   @Override
-  protected void paintBar(Event event, Paint type, int xOffset, int width) {
+  protected void paintBar(Event event, Paint type, int xOffset, int width,
+      int padding) {
     // Calculate positions
     final int cellHeight = event.getBounds().height;
     final int fontHeight = getFontHeight(event);
@@ -30,7 +31,7 @@ public class EclEmmaCleanBarPainter extends BarPainter {
 
     final int height = (int) (fontHeight * 0.75);
     final int yBar = event.getBounds().y + textBase - height - 1;
-    final int xBar = event.x + xOffset + getBorderLeft();
+    final int xBar = event.x + xOffset + getBorderLeft() + padding;
 
     // Fill
     final Color color = type.equals(Paint.MISSED) ? missedColor : coveredColor;

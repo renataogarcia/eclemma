@@ -7,7 +7,8 @@ import com.mountainminds.eclemma.internal.ui.EclEmmaUIPlugin;
 public class JaCoCoBarPainter extends BarPainter {
 
   @Override
-  protected void paintBar(Event event, Paint type, int xOffset, int width) {
+  protected void paintBar(Event event, Paint type, int xOffset, int width,
+      int padding) {
     // Calculate positions
     final int cellHeight = event.getBounds().height;
     final int fontHeight = getFontHeight(event);
@@ -20,6 +21,6 @@ public class JaCoCoBarPainter extends BarPainter {
         EclEmmaUIPlugin.DGM_REDBAR : EclEmmaUIPlugin.DGM_GREENBAR;
 
     event.gc.drawImage(EclEmmaUIPlugin.getImage(imageKey), 0, 0, 1, 10,
-        event.x + xOffset + getBorderLeft(), yBar, width, fontHeight);
+        event.x + xOffset + getBorderLeft() + padding, yBar, width, fontHeight);
   }
 }

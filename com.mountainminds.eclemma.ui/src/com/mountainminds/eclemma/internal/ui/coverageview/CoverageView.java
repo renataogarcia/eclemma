@@ -38,6 +38,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -211,8 +212,20 @@ public class CoverageView extends ViewPart implements IShowInTarget {
           ICounter counter = CoverageTools.getCoverageInfo(element).getCounter(
               settings.getCounters());
           barPainter.paint(event, column1.getColumn().getWidth(), counter,
-              maxTotalCache.getMaxTotal(element));
+              maxTotalCache.getMaxTotal(element), calcItemLevel(event));
         }
+      }
+
+      private int calcItemLevel(Event event) {
+        // Calculates the level by counting the number of parents
+        TreeItem treeItem = (TreeItem) event.item;
+        int level = 0;
+        TreeItem p = treeItem.getParentItem();
+        while (p != null) {
+          level++;
+          p = p.getParentItem();
+        }
+        return level;
       }
     });
     sorter.addColumn(column1, COLUMN_RATIO);
